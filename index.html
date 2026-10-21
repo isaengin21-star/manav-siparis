@@ -5,11 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YeşilVadi Gurme Manav & Dağıtım Ağı</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Firebase SDK Kütüphaneleri (CDN) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
   <style>
     :root {
       --primary: #27ae60;
@@ -18,31 +13,16 @@
       --dark: #2c3e50;
       --light: #f8f9fa;
       --danger: #e74c3c;
-      --info: #2980b9;
       --card-shadow: 0 10px 25px rgba(0,0,0,0.08);
       --border-radius: 12px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: #f0f2f5; color: #333; }
 
-    body {
-      background-color: #f0f2f5;
-      color: #333;
-    }
+    .view-section { display: none; }
+    .view-section.active { display: block; }
 
-    .view-section {
-      display: none;
-    }
-    .view-section.active {
-      display: block;
-    }
-
-    /* Müşteri Başlığı */
     header {
       background: #ffffff;
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
@@ -69,12 +49,6 @@
       font-weight: 800;
     }
 
-    .nav-actions {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-    }
-
     .cart-trigger {
       position: relative;
       background: var(--primary);
@@ -97,10 +71,9 @@
       font-size: 0.8rem;
     }
 
-    /* Banner */
     .hero-banner {
       background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80') center/cover;
-      height: 220px;
+      height: 200px;
       border-radius: var(--border-radius);
       margin: 1.5rem auto;
       max-width: 1300px;
@@ -110,7 +83,6 @@
       color: #fff;
     }
 
-    /* Ürün Izgarası */
     .layout-container {
       max-width: 1300px;
       margin: 0 auto;
@@ -125,15 +97,11 @@
       border-radius: var(--border-radius);
       overflow: hidden;
       box-shadow: var(--card-shadow);
-      transition: transform 0.25s, box-shadow 0.25s;
       display: flex;
       flex-direction: column;
+      transition: transform 0.2s;
     }
-
-    .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.12);
-    }
+    .product-card:hover { transform: translateY(-4px); }
 
     .img-wrapper {
       position: relative;
@@ -145,11 +113,6 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s;
-    }
-
-    .product-card:hover .product-img {
-      transform: scale(1.06);
     }
 
     .badge-stock {
@@ -178,17 +141,11 @@
       margin-bottom: 0.3rem;
     }
 
-    .product-origin {
-      font-size: 0.85rem;
-      color: #888;
-      margin-bottom: 0.8rem;
-    }
-
     .price-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
+      margin: 0.8rem 0;
     }
 
     .price-tag {
@@ -209,14 +166,9 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      transition: 0.2s;
+      width: 100%;
     }
 
-    .btn-add:hover {
-      background: var(--primary-dark);
-    }
-
-    /* Sepet Çekmecesi */
     .drawer {
       position: fixed;
       right: -420px;
@@ -231,10 +183,7 @@
       flex-direction: column;
       padding: 1.5rem;
     }
-
-    .drawer.open {
-      right: 0;
-    }
+    .drawer.open { right: 0; }
 
     .drawer-header {
       display: flex;
@@ -244,45 +193,24 @@
       padding-bottom: 1rem;
     }
 
-    .cart-items {
-      flex: 1;
-      overflow-y: auto;
-      margin: 1rem 0;
-    }
+    .cart-items { flex: 1; overflow-y: auto; margin: 1rem 0; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid #f1f1f1; }
 
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.8rem 0;
-      border-bottom: 1px solid #f1f1f1;
-    }
-
-    /* Gizli Yönetici Girişi */
     .stealth-admin-trigger {
       position: fixed;
       bottom: 10px;
       right: 10px;
-      width: 25px;
-      height: 25px;
-      opacity: 0.25;
+      width: 30px;
+      height: 30px;
+      opacity: 0.3;
       border: none;
       background: transparent;
       cursor: pointer;
       z-index: 50;
-      font-size: 15px;
-      color: #333;
-    }
-    .stealth-admin-trigger:hover {
-      opacity: 0.9;
+      font-size: 18px;
     }
 
-    /* Panel Düzeni */
-    .dashboard {
-      background: #f8fafc;
-      min-height: 100vh;
-    }
-
+    .dashboard { background: #f8fafc; min-height: 100vh; }
     .dash-nav {
       background: var(--dark);
       color: #fff;
@@ -291,12 +219,7 @@
       justify-content: space-between;
       align-items: center;
     }
-
-    .dash-menu {
-      display: flex;
-      gap: 15px;
-    }
-
+    .dash-menu { display: flex; gap: 10px; }
     .dash-btn {
       background: rgba(255,255,255,0.1);
       border: none;
@@ -306,140 +229,47 @@
       cursor: pointer;
       font-weight: 600;
     }
-    .dash-btn.active {
-      background: var(--primary);
-    }
+    .dash-btn.active { background: var(--primary); }
 
-    .dash-content {
-      max-width: 1400px;
-      margin: 2rem auto;
-      padding: 0 1.5rem;
-    }
+    .dash-content { max-width: 1300px; margin: 2rem auto; padding: 0 1.5rem; }
+    .table-container { background: #fff; border-radius: var(--border-radius); box-shadow: var(--card-shadow); padding: 1.5rem; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; }
 
-    .table-container {
-      background: #fff;
-      border-radius: var(--border-radius);
-      box-shadow: var(--card-shadow);
-      padding: 1.5rem;
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
-
-    th, td {
-      padding: 12px 16px;
-      border-bottom: 1px solid #e2e8f0;
-      vertical-align: middle;
-    }
-
-    th {
-      background-color: #f8fafc;
-      color: #64748b;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-    }
-
-    .status-pill {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .status-pending { background: #fef3c7; color: #b45309; }
-    .status-courier { background: #e0f2fe; color: #0369a1; }
-    .status-delivered { background: #dcfce7; color: #15803d; }
-
-    /* Modal */
     .modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
+      display: none; justify-content: center; align-items: center;
       z-index: 1000;
     }
-
-    .modal-box {
-      background: #fff;
-      border-radius: var(--border-radius);
-      width: 90%;
-      max-width: 500px;
-      padding: 2rem;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 0.4rem;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      padding: 0.6rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
+    .modal-box { background: #fff; border-radius: var(--border-radius); width: 90%; max-width: 500px; padding: 2rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.9rem; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 6px; }
   </style>
 </head>
 <body>
 
-  <!-- ============================================== -->
-  <!-- 1. MÜŞTERİ VİTRİNİ                             -->
-  <!-- ============================================== -->
+  <!-- MÜŞTERİ SAYFASI -->
   <div id="customerView" class="view-section active">
     <header>
       <div class="nav-bar">
-        <div class="brand">
-          <i class="fa-solid fa-leaf"></i>
-          <span>YeşilVadi Gurme Manav</span>
-        </div>
-        <div class="nav-actions">
-          <button class="cart-trigger" onclick="toggleCart()">
-            <i class="fa-solid fa-basket-shopping"></i>
-            <span>Sepetim</span>
-            <span class="badge" id="cartBadge">0</span>
-          </button>
-        </div>
+        <div class="brand"><i class="fa-solid fa-leaf"></i> <span>YeşilVadi Manav</span></div>
+        <button class="cart-trigger" onclick="toggleCart()">
+          <i class="fa-solid fa-basket-shopping"></i> <span>Sepetim</span> <span class="badge" id="cartBadge">0</span>
+        </button>
       </div>
     </header>
 
     <div class="hero-banner">
       <div>
         <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Dalından Kapınıza, Taptaze!</h1>
-        <p>Doğal sertifikalı bahçelerden günlük toplanan taze ürünler.</p>
+        <p>Bahçeden sofranıza günlük taze sebze ve meyveler.</p>
       </div>
     </div>
 
-    <!-- Aktif Sipariş Canlı Takip Çubuğu -->
-    <div id="customerActiveOrderBanner" style="display:none; max-width:1300px; margin:0 auto 1.5rem; padding:1rem 1.5rem; background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; align-items:center; justify-content:space-between;">
-      <div>
-        <strong id="activeOrderIdText" style="color:#1d4ed8;"></strong>
-        <div id="activeOrderStatusText" style="font-size:0.9rem; color:#475569;"></div>
-      </div>
-      <button onclick="openLiveTrackingModalFromBanner()" style="background:#2563eb; color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; font-weight:600;">
-        <i class="fa-solid fa-map-location-dot"></i> Canlı Kurye Takibi
-      </button>
-    </div>
-
-    <main class="layout-container" id="productContainer">
-      <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">
-        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-        <p style="margin-top: 10px;">Ürünler canlı veritabanından getiriliyor...</p>
-      </div>
-    </main>
+    <main class="layout-container" id="productContainer"></main>
 
     <!-- Sepet Çekmecesi -->
     <div class="drawer" id="cartDrawer">
@@ -450,48 +280,43 @@
       <div class="cart-items" id="cartItemsList"></div>
       <div>
         <div style="display:flex; justify-content:space-between; margin-bottom:1rem; font-weight:bold; font-size:1.2rem;">
-          <span>Toplam:</span>
-          <span id="cartTotal">0.00 TL</span>
+          <span>Toplam:</span> <span id="cartTotal">0.00 TL</span>
         </div>
-        <button class="btn-add" style="width:100%; padding:0.9rem;" onclick="openCheckoutModal()">Siparişi Tamamla</button>
+        <button class="btn-add" style="padding:0.9rem;" onclick="openCheckoutModal()">Siparişi Tamamla</button>
       </div>
     </div>
   </div>
 
-  <!-- Gizli Yönetici Tetikleyici (Kilit Simgesi veya Ctrl+Shift+A) -->
-  <button class="stealth-admin-trigger" onclick="promptAdminLogin()" title="Yönetici Girişi"><i class="fa-solid fa-lock"></i></button>
+  <!-- Gizli Yönetici Girişi (Sağ alttaki kilit simgesi) -->
+  <button class="stealth-admin-trigger" onclick="promptAdminLogin()" title="Yönetim Girişi"><i class="fa-solid fa-lock"></i></button>
 
-  <!-- ============================================== -->
-  <!-- 2. GİZLİ YÖNETİM PANELİ                        -->
-  <!-- ============================================== -->
+  <!-- YÖNETİCİ PANELİ -->
   <div id="adminView" class="view-section dashboard">
     <div class="dash-nav">
-      <div style="font-weight:bold; font-size:1.2rem;"><i class="fa-solid fa-shield-halved"></i> Yönetim Portalı (Bulut Bağlantılı)</div>
+      <div style="font-weight:bold; font-size:1.2rem;"><i class="fa-solid fa-shield-halved"></i> Yönetim Portalı</div>
       <div class="dash-menu">
-        <button class="dash-btn active" id="tabBtnProducts" onclick="switchAdminTab('products')">Ürün Yönetimi</button>
-        <button class="dash-btn" id="tabBtnOrders" onclick="switchAdminTab('orders')">Sipariş Akışı</button>
-        <button class="dash-btn" style="background:#e67e22;" onclick="showView('courierView')">Kurye Ekranı</button>
+        <button class="dash-btn active" id="tabBtnProducts" onclick="switchAdminTab('products')">Ürünler</button>
+        <button class="dash-btn" id="tabBtnOrders" onclick="switchAdminTab('orders')">Siparişler</button>
         <button class="dash-btn" style="background:var(--danger);" onclick="exitAdmin()">Müşteri Vitrini</button>
       </div>
     </div>
 
     <div class="dash-content">
-      <!-- Sekme 1: Ürün Yönetimi -->
       <div id="adminTabProducts">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-          <h2>Ürün Envanteri & Fiyatlar</h2>
-          <button class="btn-add" onclick="openAddProductModal()"><i class="fa-solid fa-plus"></i> Yeni Ürün Ekle</button>
+          <h2>Ürün Listesi</h2>
+          <button class="btn-add" style="width:auto; padding:0.6rem 1.2rem;" onclick="openAddProductModal()"><i class="fa-solid fa-plus"></i> Yeni Ürün Ekle</button>
         </div>
         <div class="table-container">
           <table>
             <thead>
               <tr>
                 <th>Görsel</th>
-                <th>Ürün Adı</th>
+                <th>Ürün</th>
                 <th>Birim</th>
                 <th>Fiyat</th>
                 <th>Stok</th>
-                <th>İşlemler</th>
+                <th>İşlem</th>
               </tr>
             </thead>
             <tbody id="adminProductsTable"></tbody>
@@ -499,20 +324,17 @@
         </div>
       </div>
 
-      <!-- Sekme 2: Sipariş Akışı -->
       <div id="adminTabOrders" style="display:none;">
-        <h2 style="margin-bottom:1.5rem;">Gelen Siparişler & Durum Kontrolü</h2>
+        <h2 style="margin-bottom:1.5rem;">Gelen Siparişler</h2>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th>Kod & Zaman</th>
+                <th>Kod & Saat</th>
                 <th>Müşteri</th>
                 <th>Adres</th>
-                <th>Paket</th>
+                <th>İçerik</th>
                 <th>Tutar</th>
-                <th>Durum</th>
-                <th>İşlem</th>
               </tr>
             </thead>
             <tbody id="adminOrdersTable"></tbody>
@@ -522,469 +344,96 @@
     </div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- 3. CANLI KURYE PANELİ                          -->
-  <!-- ============================================== -->
-  <div id="courierView" class="view-section dashboard">
-    <div class="dash-nav" style="background: #2c3e50;">
-      <div style="font-weight:bold; font-size:1.2rem;"><i class="fa-solid fa-motorcycle"></i> Hızlı Kurye Terminali</div>
-      <div>
-        <button class="dash-btn" onclick="showView('adminView')">Panele Dön</button>
-        <button class="dash-btn" style="background:var(--danger);" onclick="exitAdmin()">Müşteri Görünümü</button>
-      </div>
-    </div>
-    <div class="dash-content">
-      <h2 style="margin-bottom:1rem;">Zimmetli Dağıtım Görevleri</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Sipariş</th>
-              <th>Müşteri</th>
-              <th>İletişim</th>
-              <th>Adres & Navigasyon</th>
-              <th>Ürünler</th>
-              <th>Teslimat & Canlı GPS</th>
-            </tr>
-          </thead>
-          <tbody id="courierOrdersTable"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- MODALLAR                                       -->
-  <!-- ============================================== -->
-  <!-- Sipariş Verme Modalı -->
-  <div class="modal-overlay" id="checkoutModal">
-    <div class="modal-box">
-      <h3 style="margin-bottom:1rem;">Teslimat Bilgileri</h3>
-      <div class="form-group">
-        <label>Adınız Soyadınız</label>
-        <input type="text" id="custName" placeholder="Ahmet Yılmaz">
-      </div>
-      <div class="form-group">
-        <label>Telefon Numarası</label>
-        <input type="tel" id="custPhone" placeholder="0532 000 0000">
-      </div>
-      <div class="form-group">
-        <label>Teslimat Adresi</label>
-        <textarea id="custAddress" rows="3" placeholder="Mahalle, Cadde, Sokak, No, Daire"></textarea>
-      </div>
-      <div style="display:flex; gap:10px;">
-        <button class="btn-add" style="flex:1;" onclick="submitOrder()">Siparişi Onayla & WhatsApp</button>
-        <button class="btn-add" style="background:#ccc; flex:1;" onclick="closeModal('checkoutModal')">İptal</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Ürün Ekleme/Düzenleme Modalı -->
+  <!-- Ürün Ekleme Penceresi -->
   <div class="modal-overlay" id="productModal">
     <div class="modal-box">
-      <h3 id="productModalTitle" style="margin-bottom:1rem;">Yeni Ürün Tanımla</h3>
-      <input type="hidden" id="editProductId">
-      <div class="form-group">
-        <label>Ürün Adı</label>
-        <input type="text" id="prodName" placeholder="Örn: Amasya Elması" oninput="autoSuggestImage()">
-      </div>
-      <div class="form-group">
-        <label>Ürün Görseli (Otomatik veya URL)</label>
-        <input type="text" id="prodImg" placeholder="https://images.unsplash.com/...">
-        <small style="color:#666;">Ürün adını yazdığınızda otomatik HD fotoğraf seçilir.</small>
-      </div>
-      <div class="form-group">
-        <label>Fiyat (TL)</label>
-        <input type="number" id="prodPrice" step="0.5" placeholder="35.00">
-      </div>
-      <div class="form-group">
-        <label>Birim</label>
+      <h3 style="margin-bottom:1rem;">Yeni Ürün Ekle</h3>
+      <div class="form-group"><label>Ürün Adı</label><input type="text" id="prodName" placeholder="Örn: Amasya Elması"></div>
+      <div class="form-group"><label>Fiyat (TL)</label><input type="number" id="prodPrice" step="0.5" placeholder="35.00"></div>
+      <div class="form-group"><label>Birim</label>
         <select id="prodUnit">
           <option value="kg">Kilogram (kg)</option>
           <option value="adet">Adet</option>
           <option value="paket">Paket</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Stok Miktarı</label>
-        <input type="number" id="prodStock" placeholder="100">
-      </div>
+      <div class="form-group"><label>Stok</label><input type="number" id="prodStock" placeholder="100"></div>
       <div style="display:flex; gap:10px;">
-        <button class="btn-add" style="flex:1;" id="saveProductBtn" onclick="saveProduct()">Kaydet</button>
-        <button class="btn-add" style="background:#ccc; flex:1;" onclick="closeModal('productModal')">Vazgeç</button>
+        <button class="btn-add" onclick="saveProduct()">Kaydet</button>
+        <button class="btn-add" style="background:#ccc;" onclick="closeModal('productModal')">Vazgeç</button>
       </div>
     </div>
   </div>
 
-  <!-- Canlı Kurye & ETA Takip Modalı -->
-  <div class="modal-overlay" id="trackingModal">
-    <div class="modal-box" style="max-width: 650px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <h3 id="trackingOrderTitle"><i class="fa-solid fa-motorcycle"></i> Canlı Kurye Takibi</h3>
-        <button onclick="closeModal('trackingModal')" style="border:none; background:none; font-size:1.4rem; cursor:pointer;">&times;</button>
-      </div>
-      <div>
-        <iframe id="liveMapFrame" width="100%" height="320" style="border:0; border-radius:8px;" loading="lazy"></iframe>
-        <div id="trackingStatusText"></div>
+  <!-- Sipariş Verme Penceresi -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-box">
+      <h3 style="margin-bottom:1rem;">Teslimat Bilgileri</h3>
+      <div class="form-group"><label>Ad Soyad</label><input type="text" id="custName" placeholder="Ahmet Yılmaz"></div>
+      <div class="form-group"><label>Telefon</label><input type="tel" id="custPhone" placeholder="0532 000 0000"></div>
+      <div class="form-group"><label>Adres</label><textarea id="custAddress" rows="3" placeholder="Açık adresiniz..."></textarea></div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn-add" onclick="submitOrder()">WhatsApp'a İlet</button>
+        <button class="btn-add" style="background:#ccc;" onclick="closeModal('checkoutModal')">İptal</button>
       </div>
     </div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- JAVASCRIPT & FIREBASE ENTEGRASYONU             -->
-  <!-- ============================================== -->
   <script>
-    // 1. Manav WhatsApp Sipariş Hattı
-    const MANAV_WHATSAPP_NO = "905320000000"; 
-
-    // 2. Firebase Bağlantısı
-    const firebaseConfig = {
-      apiKey: "AIzaSyDd6LjWK7iN6TUSDjFPYZX7LPt2Egw89Y4",
-      authDomain: "manav-sistemi.firebaseapp.com",
-      projectId: "manav-sistemi",
-      storageBucket: "manav-sistemi.firebasestorage.app",
-      messagingSenderId: "505203815715",
-      appId: "1:505203815715:web:cfb8689f02a7af67f78896",
-      measurementId: "G-0KZERZH41C"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    // 3. Otomatik Görsel Haritası
-    const REALISTIC_IMAGE_MAP = {
-      "elma": "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=600&q=80",
-      "muz": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=600&q=80",
-      "domates": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=600&q=80",
-      "salatalık": "https://images.unsplash.com/photo-1604977042946-1eecc30f269e?auto=format&fit=crop&w=600&q=80",
-      "portakal": "https://images.unsplash.com/photo-1547514701-42782101795e?auto=format&fit=crop&w=600&q=80",
-      "çilek": "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=600&q=80",
-      "avokado": "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&w=600&q=80",
-      "limon": "https://images.unsplash.com/photo-1534940562681-35b86b4a5528?auto=format&fit=crop&w=600&q=80",
-      "havuç": "https://images.unsplash.com/photo-1598170845058-32b9d6a5c731?auto=format&fit=crop&w=600&q=80",
-      "üzüm": "https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&w=600&q=80",
-      "biber": "https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?auto=format&fit=crop&w=600&q=80",
-      "patates": "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=600&q=80"
-    };
-
-    const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=600&q=80";
-
+    // Sabit Ürün Kataloğu (Her zaman sorunsuz yüklenir)
     const DEFAULT_PRODUCTS = [
-      { id: "1", name: "Amasya Elması", price: 34.90, unit: "kg", stock: 85, img: REALISTIC_IMAGE_MAP["elma"] },
-      { id: "2", name: "Yerli Anamur Muz", price: 68.00, unit: "kg", stock: 50, img: REALISTIC_IMAGE_MAP["muz"] },
-      { id: "3", name: "Salkım Domates", price: 42.50, unit: "kg", stock: 120, img: REALISTIC_IMAGE_MAP["domates"] },
-      { id: "4", name: "Çengelköy Salatalık", price: 32.00, unit: "kg", stock: 90, img: REALISTIC_IMAGE_MAP["salatalık"] },
-      { id: "5", name: "Washington Portakal", price: 29.50, unit: "kg", stock: 110, img: REALISTIC_IMAGE_MAP["portakal"] },
-      { id: "6", name: "Taze Dağ Çileği", price: 85.00, unit: "paket", stock: 30, img: REALISTIC_IMAGE_MAP["çilek"] }
+      { id: "1", name: "Amasya Elması", price: 34.90, unit: "kg", stock: 85, img: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=600&q=80" },
+      { id: "2", name: "Yerli Anamur Muz", price: 68.00, unit: "kg", stock: 50, img: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=600&q=80" },
+      { id: "3", name: "Salkım Domates", price: 42.50, unit: "kg", stock: 120, img: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=600&q=80" },
+      { id: "4", name: "Çengelköy Salatalık", price: 32.00, unit: "kg", stock: 90, img: "https://images.unsplash.com/photo-1604977042946-1eecc30f269e?auto=format&fit=crop&w=600&q=80" },
+      { id: "5", name: "Washington Portakal", price: 29.50, unit: "kg", stock: 110, img: "https://images.unsplash.com/photo-1547514701-42782101795e?auto=format&fit=crop&w=600&q=80" },
+      { id: "6", name: "Taze Dağ Çileği", price: 85.00, unit: "paket", stock: 30, img: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=600&q=80" }
     ];
 
-    let products = [];
-    let orders = [];
+    const FALLBACK_IMG = "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=600&q=80";
+    const MANAV_WHATSAPP_NO = "905320000000";
+
+    // Tarayıcı hafızasını yükle veya varsayılanları getir
+    let storedProducts = localStorage.getItem('yv_products');
+    let products = storedProducts ? JSON.parse(storedProducts) : [...DEFAULT_PRODUCTS];
+    let orders = JSON.parse(localStorage.getItem('yv_orders') || '[]');
     let cart = [];
-    let gpsWatchId = null;
-    let currentActiveOrderId = localStorage.getItem('mv_last_order_id') || null;
 
-    // 4. FIREBASE CANLI DİNLEYİCİLERİ (Real-Time Sync)
-    // Ürünler Dinleyicisi: Başka biri ürün eklediğinde sayfa yenilenmeden vitrin güncellenir
-    db.ref('products').on('value', (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        products = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-      } else {
-        // Veritabanı boşsa varsayılanları Firebase'e yaz
-        DEFAULT_PRODUCTS.forEach(item => {
-          db.ref('products/' + item.id).set(item);
-        });
-        products = [...DEFAULT_PRODUCTS];
-      }
-      renderCustomerProducts();
-      renderAdminTables();
-    });
-
-    // Siparişler Dinleyicisi: Yeni sipariş geldiğinde yönetici ve kurye ekranı anında güncellenir
-    db.ref('orders').on('value', (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        orders = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
-      } else {
-        orders = [];
-      }
-      renderAdminTables();
-      renderCourierTable();
-      checkActiveCustomerOrder();
-    });
-
-    // 5. Haversine & ETA Motoru
-    function toRad(deg) { return (deg * Math.PI) / 180; }
-
-    function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
-      const R = 6371;
-      const dLat = toRad(lat2 - lat1);
-      const dLon = toRad(lon2 - lon1);
-      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return (R * c) * 1.3;
+    function saveAll() {
+      localStorage.setItem('yv_products', JSON.stringify(products));
+      localStorage.setItem('yv_orders', JSON.stringify(orders));
     }
 
-    function calculateETA(distanceKm, speedKmH) {
-      const effectiveSpeed = (speedKmH && speedKmH > 10) ? speedKmH : 30;
-      let travelMinutes = (distanceKm / effectiveSpeed) * 60 + 3;
-      return Math.ceil(travelMinutes);
-    }
-
-    // 6. Sayfa Kontrolleri
-    function showView(viewId) {
-      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-      document.getElementById(viewId).classList.add('active');
-      if (viewId === 'customerView') {
-        renderCustomerProducts();
-        checkActiveCustomerOrder();
-      }
-      if (viewId === 'adminView') renderAdminTables();
-      if (viewId === 'courierView') renderCourierTable();
-    }
-
-    function promptAdminLogin() {
-      const pass = prompt("Yönetici Giriş Parolasını Girin:");
-      if (pass === "admin123") {
-        showView('adminView');
-      } else if (pass !== null) {
-        alert("Yetkisiz Erişim: Parola Hatalı!");
-      }
-    }
-
-    window.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.shiftKey && e.key === 'A') promptAdminLogin();
-    });
-
-    function exitAdmin() { showView('customerView'); }
-
-    // 7. Müşteri Vitrini & Sepet
-    function renderCustomerProducts() {
+    function renderProducts() {
       const container = document.getElementById('productContainer');
-      if (products.length === 0) {
-        container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; padding:2rem; color:#888;">Henüz ürün eklenmemiş.</p>`;
-        return;
-      }
-
-      container.innerHTML = products.map(prod => `
+      container.innerHTML = products.map(p => `
         <div class="product-card">
           <div class="img-wrapper">
-            <span class="badge-stock">Stok: ${prod.stock} ${prod.unit}</span>
-            <img src="${prod.img}" alt="${prod.name}" class="product-img" onerror="this.src='${FALLBACK_IMAGE}'">
+            <span class="badge-stock">Stok: ${p.stock} ${p.unit}</span>
+            <img src="${p.img || FALLBACK_IMG}" alt="${p.name}" class="product-img">
           </div>
           <div class="product-info">
-            <div>
-              <div class="product-title">${prod.name}</div>
-              <div class="product-origin"><i class="fa-solid fa-seedling"></i> Doğal Tarım Garantili</div>
+            <div class="product-title">${p.name}</div>
+            <div class="price-row">
+              <span class="price-tag">${parseFloat(p.price).toFixed(2)} ₺ <small style="font-size:0.8rem; color:#777;">/${p.unit}</small></span>
             </div>
-            <div>
-              <div class="price-row">
-                <span class="price-tag">${parseFloat(prod.price).toFixed(2)} ₺ <span style="font-size:0.8rem; color:#777;">/${prod.unit}</span></span>
-              </div>
-              <button class="btn-add" style="width:100%;" onclick="addToCart('${prod.id}')">
-                <i class="fa-solid fa-cart-plus"></i> Sepete Ekle
-              </button>
-            </div>
+            <button class="btn-add" onclick="addToCart('${p.id}')"><i class="fa-solid fa-cart-plus"></i> Sepete Ekle</button>
           </div>
         </div>
       `).join('');
     }
 
-    function toggleCart() {
-      document.getElementById('cartDrawer').classList.toggle('open');
-    }
-
-    function addToCart(productId) {
-      const product = products.find(p => p.id == productId);
-      if (!product || product.stock <= 0) {
-        alert("Üzgünüz, bu ürün stokta tükenmiştir!");
-        return;
-      }
-      const existing = cart.find(item => item.id == productId);
-      if (existing) {
-        if (existing.qty < product.stock) {
-          existing.qty += 1;
-        } else {
-          alert("Mevcut stoktan fazlasını sepete ekleyemezsiniz.");
-        }
-      } else {
-        cart.push({ ...product, qty: 1 });
-      }
-      updateCartUI();
-    }
-
-    function updateCartUI() {
-      const list = document.getElementById('cartItemsList');
-      const badge = document.getElementById('cartBadge');
-      const totalEl = document.getElementById('cartTotal');
-
-      badge.textContent = cart.reduce((sum, item) => sum + item.qty, 0);
-
-      if (cart.length === 0) {
-        list.innerHTML = `<p style="text-align:center; color:#999; margin-top:2rem;">Sepetiniz şu anda boş.</p>`;
-        totalEl.textContent = '0.00 TL';
-        return;
-      }
-
-      let total = 0;
-      list.innerHTML = cart.map(item => {
-        const itemTotal = item.price * item.qty;
-        total += itemTotal;
-        return `
-          <div class="cart-item">
-            <div>
-              <strong>${item.name}</strong>
-              <div style="font-size:0.85rem; color:#666;">${parseFloat(item.price).toFixed(2)} ₺ × ${item.qty}</div>
-            </div>
-            <div>
-              <strong>${itemTotal.toFixed(2)} ₺</strong>
-              <button onclick="removeFromCart('${item.id}')" style="border:none; background:none; color:red; margin-left:10px; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      totalEl.textContent = `${total.toFixed(2)} TL`;
-    }
-
-    function removeFromCart(id) {
-      cart = cart.filter(item => item.id != id);
-      updateCartUI();
-    }
-
-    function openCheckoutModal() {
-      if (cart.length === 0) {
-        alert("Lütfen önce sepetinize ürün ekleyin!");
-        return;
-      }
-      document.getElementById('checkoutModal').style.display = 'flex';
-    }
-
-    // 8. Bulut Entegreli Sipariş Gönderme
-    function submitOrder() {
-      const name = document.getElementById('custName').value.trim();
-      const phone = document.getElementById('custPhone').value.trim();
-      const address = document.getElementById('custAddress').value.trim();
-
-      if (!name || !phone || !address) {
-        alert("Lütfen tüm alanları eksiksiz doldurun!");
-        return;
-      }
-
-      const total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-      const orderId = "SIP-" + Math.floor(100000 + Math.random() * 900000);
-      const currentTime = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
-
-      const newOrder = {
-        customer: name,
-        phone: phone,
-        address: address,
-        customerLocation: {
-          lat: 40.7731 + (Math.random() - 0.5) * 0.04,
-          lng: 30.4028 + (Math.random() - 0.5) * 0.04
-        },
-        items: cart,
-        total: total,
-        status: "Hazırlanıyor",
-        date: currentTime
-      };
-
-      // Stokları Firebase'den eksilt
-      cart.forEach(cItem => {
-        const prodRef = db.ref('products/' + cItem.id);
-        prodRef.once('value', (snap) => {
-          const val = snap.val();
-          if (val) prodRef.update({ stock: Math.max(0, val.stock - cItem.qty) });
-        });
-      });
-
-      // Siparişi Firebase veritabanına kaydet
-      db.ref('orders/' + orderId).set(newOrder);
-
-      currentActiveOrderId = orderId;
-      localStorage.setItem('mv_last_order_id', orderId);
-
-      // WhatsApp Metni
-      let urunDetaylari = "";
-      cart.forEach((item, index) => {
-        urunDetaylari += `${index + 1}. ${item.name} -> ${item.qty} ${item.unit} (${(item.price * item.qty).toFixed(2)} TL)\n`;
-      });
-
-      const whatsappMetni = 
-`🛒 *YENİ MANAV SİPARİŞİ BİLDİRİMİ*
---------------------------------
-🔖 *Sipariş Kodu:* ${orderId}
-🕒 *Saat:* ${currentTime}
-
-👤 *MÜŞTERİ BİLGİLERİ*
-• *İsim:* ${name}
-• *Telefon:* ${phone}
-• *Adres:* ${address}
-
-📦 *SİPARİŞ İÇERİĞİ*
-${urunDetaylari}
---------------------------------
-💰 *TOPLAM TUTAR:* ${total.toFixed(2)} TL
-💳 *Ödeme:* Kapıda Nakit / Kredi Kartı`;
-
-      const whatsappUrl = `https://api.whatsapp.com/send?phone=${MANAV_WHATSAPP_NO}&text=${encodeURIComponent(whatsappMetni)}`;
-
-      cart = [];
-      updateCartUI();
-      closeModal('checkoutModal');
-      toggleCart();
-      checkActiveCustomerOrder();
-
-      alert(`Siparişiniz bulut sistemine iletildi!\n\nDetaylar WhatsApp hattına aktarılıyor...`);
-      window.open(whatsappUrl, '_blank');
-    }
-
-    function checkActiveCustomerOrder() {
-      const banner = document.getElementById('customerActiveOrderBanner');
-      if (!currentActiveOrderId) {
-        banner.style.display = 'none';
-        return;
-      }
-      const order = orders.find(o => o.id === currentActiveOrderId);
-      if (!order || order.status === 'Teslim Edildi') {
-        banner.style.display = 'none';
-        return;
-      }
-
-      banner.style.display = 'flex';
-      document.getElementById('activeOrderIdText').textContent = `Aktif Siparişiniz: ${order.id}`;
-      document.getElementById('activeOrderStatusText').textContent = `Durum: ${order.status}` + 
-        (order.courierLocation ? ` | Kurye Yolda (~${order.courierLocation.etaMinutes} dk)` : '');
-    }
-
-    function openLiveTrackingModalFromBanner() {
-      if (currentActiveOrderId) openLiveTracking(currentActiveOrderId);
-    }
-
-    // 9. Yönetici İşlemleri (Firebase'e Doğrudan Yazar)
-    function switchAdminTab(tab) {
-      document.getElementById('adminTabProducts').style.display = tab === 'products' ? 'block' : 'none';
-      document.getElementById('adminTabOrders').style.display = tab === 'orders' ? 'block' : 'none';
-      document.getElementById('tabBtnProducts').classList.toggle('active', tab === 'products');
-      document.getElementById('tabBtnOrders').classList.toggle('active', tab === 'orders');
-      renderAdminTables();
-    }
-
-    function renderAdminTables() {
+    function renderAdmin() {
       const prodBody = document.getElementById('adminProductsTable');
       prodBody.innerHTML = products.map(p => `
         <tr>
-          <td><img src="${p.img}" style="width:45px; height:45px; border-radius:6px; object-fit:cover;" onerror="this.src='${FALLBACK_IMAGE}'"></td>
+          <td><img src="${p.img || FALLBACK_IMG}" style="width:40px; height:40px; border-radius:6px; object-fit:cover;"></td>
           <td><strong>${p.name}</strong></td>
           <td>${p.unit}</td>
           <td>${parseFloat(p.price).toFixed(2)} ₺</td>
           <td>${p.stock}</td>
           <td>
-            <button onclick="editProduct('${p.id}')" style="border:none; background:#3498db; color:#fff; padding:6px 10px; border-radius:4px; cursor:pointer;"><i class="fa-solid fa-pen"></i></button>
-            <button onclick="deleteProduct('${p.id}')" style="border:none; background:#e74c3c; color:#fff; padding:6px 10px; border-radius:4px; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="deleteProduct('${p.id}')" style="border:none; background:#e74c3c; color:#fff; padding:6px 10px; border-radius:4px; cursor:pointer;"><i class="fa-solid fa-trash"></i> Sil</button>
           </td>
         </tr>
       `).join('');
@@ -993,254 +442,152 @@ ${urunDetaylari}
       orderBody.innerHTML = orders.map(o => `
         <tr>
           <td><strong>${o.id}</strong><br><small>${o.date}</small></td>
-          <td>${o.customer}<br><small>${o.phone}</small></td>
-          <td style="max-width:200px;">${o.address}</td>
-          <td>${o.items ? o.items.map(i => `${i.name} (${i.qty}${i.unit})`).join(', ') : '-'}</td>
-          <td><strong>${parseFloat(o.total).toFixed(2)} ₺</strong></td>
-          <td><span class="status-pill ${getStatusClass(o.status)}">${o.status}</span></td>
-          <td>
-            <select onchange="changeOrderStatus('${o.id}', this.value)" style="padding:5px; border-radius:4px;">
-              <option value="Hazırlanıyor" ${o.status==='Hazırlanıyor'?'selected':''}>Hazırlanıyor</option>
-              <option value="Kuryede" ${o.status==='Kuryede'?'selected':''}>Kuryede</option>
-              <option value="Teslim Edildi" ${o.status==='Teslim Edildi'?'selected':''}>Teslim Edildi</option>
-            </select>
-          </td>
+          <td>${o.name}<br><small>${o.phone}</small></td>
+          <td>${o.address}</td>
+          <td>${o.items.map(i => `${i.name} (${i.qty})`).join(', ')}</td>
+          <td><strong>${o.total.toFixed(2)} ₺</strong></td>
         </tr>
       `).join('');
     }
 
-    function getStatusClass(status) {
-      if (status === 'Hazırlanıyor') return 'status-pending';
-      if (status === 'Kuryede') return 'status-courier';
-      return 'status-delivered';
-    }
-
-    function autoSuggestImage() {
-      const name = document.getElementById('prodName').value.toLowerCase();
-      const imgInput = document.getElementById('prodImg');
-      for (const [key, url] of Object.entries(REALISTIC_IMAGE_MAP)) {
-        if (name.includes(key)) {
-          imgInput.value = url;
-          return;
-        }
-      }
-    }
-
-    function openAddProductModal() {
-      document.getElementById('productModalTitle').textContent = "Yeni Ürün Tanımla";
-      document.getElementById('editProductId').value = '';
-      document.getElementById('prodName').value = '';
-      document.getElementById('prodImg').value = '';
-      document.getElementById('prodPrice').value = '';
-      document.getElementById('prodStock').value = '';
-      document.getElementById('productModal').style.display = 'flex';
-    }
-
-    function editProduct(id) {
-      const p = products.find(prod => prod.id == id);
-      if (!p) return;
-      document.getElementById('productModalTitle').textContent = "Ürünü Güncelle";
-      document.getElementById('editProductId').value = p.id;
-      document.getElementById('prodName').value = p.name;
-      document.getElementById('prodImg').value = p.img;
-      document.getElementById('prodPrice').value = p.price;
-      document.getElementById('prodUnit').value = p.unit;
-      document.getElementById('prodStock').value = p.stock;
-      document.getElementById('productModal').style.display = 'flex';
-    }
-
     function saveProduct() {
-      const id = document.getElementById('editProductId').value || Date.now().toString();
       const name = document.getElementById('prodName').value.trim();
-      let img = document.getElementById('prodImg').value.trim();
       const price = parseFloat(document.getElementById('prodPrice').value);
       const unit = document.getElementById('prodUnit').value;
       const stock = parseInt(document.getElementById('prodStock').value);
 
       if (!name || isNaN(price) || isNaN(stock)) {
-        alert("Lütfen alanları geçerli bilgilerle doldurun!");
+        alert("Lütfen alanları eksiksiz doldurun!");
         return;
       }
 
-      if (!img) img = FALLBACK_IMAGE;
-
-      // Firebase Bulutuna Kaydet
-      db.ref('products/' + id).set({
+      products.unshift({
+        id: Date.now().toString(),
         name: name,
-        img: img,
         price: price,
         unit: unit,
-        stock: stock
-      }).then(() => {
-        closeModal('productModal');
-      }).catch(err => {
-        alert("Firebase kayıt hatası: " + err.message);
+        stock: stock,
+        img: FALLBACK_IMG
       });
+
+      saveAll();
+      renderProducts();
+      renderAdmin();
+      closeModal('productModal');
+
+      document.getElementById('prodName').value = '';
+      document.getElementById('prodPrice').value = '';
+      document.getElementById('prodStock').value = '';
+      alert("Ürün başarıyla eklendi!");
     }
 
     function deleteProduct(id) {
       if (confirm("Bu ürünü silmek istediğinize emin misiniz?")) {
-        db.ref('products/' + id).remove();
+        products = products.filter(p => p.id != id);
+        saveAll();
+        renderProducts();
+        renderAdmin();
       }
     }
 
-    // 10. Kurye Paneli & Canlı GPS
-    function renderCourierTable() {
-      const courierBody = document.getElementById('courierOrdersTable');
-      if (orders.length === 0) {
-        courierBody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:1.5rem; color:#888;">Henüz sipariş bulunmuyor.</td></tr>`;
+    function addToCart(id) {
+      const p = products.find(prod => prod.id == id);
+      if (!p || p.stock <= 0) return alert("Bu ürün tükenmiştir!");
+
+      const item = cart.find(i => i.id == id);
+      if (item) {
+        if (item.qty < p.stock) item.qty += 1;
+        else alert("Stoktan fazlasını ekleyemezsiniz.");
+      } else {
+        cart.push({ ...p, qty: 1 });
+      }
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      document.getElementById('cartBadge').textContent = cart.reduce((s, i) => s + i.qty, 0);
+      const list = document.getElementById('cartItemsList');
+      if (cart.length === 0) {
+        list.innerHTML = `<p style="text-align:center; color:#999; margin-top:2rem;">Sepetiniz boş.</p>`;
+        document.getElementById('cartTotal').textContent = '0.00 TL';
         return;
       }
-
-      courierBody.innerHTML = orders.map(o => {
-        const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(o.address)}`;
-        const gpsBadge = o.courierLocation ? `
-          <div style="font-size:0.75rem; background:#ecfdf5; border:1px solid #a7f3d0; padding:4px 6px; border-radius:4px; margin-top:6px;">
-            <div><i class="fa-solid fa-satellite-dish" style="color:#059669;"></i> <strong>GPS Aktif:</strong> ~${o.courierLocation.speed} km/s</div>
-            <div>Mesafe: <strong>${o.courierLocation.distanceKm} km</strong> | ETA: <strong>~${o.courierLocation.etaMinutes} dk</strong></div>
-          </div>
-        ` : '';
-
+      let t = 0;
+      list.innerHTML = cart.map(i => {
+        t += i.price * i.qty;
         return `
-          <tr>
-            <td><strong>${o.id}</strong><br><small style="color:#777;">${o.date}</small></td>
-            <td>${o.customer}</td>
-            <td>
-              <a href="tel:${o.phone}" style="color:var(--primary); font-weight:bold; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
-                <i class="fa-solid fa-phone"></i> ${o.phone}
-              </a>
-            </td>
-            <td>
-              <div style="max-width:220px; margin-bottom:6px;">${o.address}</div>
-              <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" style="
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
-                background: #ea4335;
-                color: #fff;
-                padding: 4px 8px;
-                border-radius: 6px;
-                text-decoration: none;
-                font-size: 0.78rem;
-                font-weight: 600;
-              ">
-                <i class="fa-solid fa-location-dot"></i> Haritada Aç
-              </a>
-            </td>
-            <td>
-              <small style="color:#444;">${o.items ? o.items.map(i => `${i.name} (${i.qty}${i.unit})`).join(', ') : '-'}</small>
-            </td>
-            <td>
-              ${o.status === 'Hazırlanıyor' ? 
-                `<button onclick="changeOrderStatus('${o.id}', 'Kuryede')" style="background:#0284c7; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fa-solid fa-motorcycle"></i> Teslim Al</button>` :
-                o.status === 'Kuryede' ?
-                `<div>
-                   <button onclick="changeOrderStatus('${o.id}', 'Teslim Edildi')" style="background:#16a34a; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600;"><i class="fa-solid fa-check-double"></i> Teslim Ettim</button>
-                   ${gpsBadge}
-                 </div>` :
-                `<span style="color:#16a34a; font-weight:bold;"><i class="fa-solid fa-circle-check"></i> Teslim Edildi</span>`
-              }
-            </td>
-          </tr>
+          <div class="cart-item">
+            <div><strong>${i.name}</strong><br><small>${i.qty} adet</small></div>
+            <div><strong>${(i.price * i.qty).toFixed(2)} ₺</strong> <button onclick="removeFromCart('${i.id}')" style="border:none; background:none; color:red; margin-left:10px; cursor:pointer;">&times;</button></div>
+          </div>
         `;
       }).join('');
+      document.getElementById('cartTotal').textContent = t.toFixed(2) + ' TL';
     }
 
-    function changeOrderStatus(orderId, newStatus) {
-      db.ref('orders/' + orderId).update({ status: newStatus });
-      if (newStatus === 'Kuryede') {
-        startCourierTracking(orderId);
-      } else if (newStatus === 'Teslim Edildi') {
-        stopCourierTracking();
-      }
+    function removeFromCart(id) {
+      cart = cart.filter(i => i.id != id);
+      updateCartUI();
     }
 
-    function startCourierTracking(orderId) {
-      if (!navigator.geolocation) return;
-      gpsWatchId = navigator.geolocation.watchPosition(
-        (pos) => {
-          const lat = pos.coords.latitude;
-          const lng = pos.coords.longitude;
-          const speed = pos.coords.speed ? (pos.coords.speed * 3.6) : 0;
-
-          const order = orders.find(o => o.id === orderId);
-          if (order && order.customerLocation) {
-            const distKm = calculateHaversineDistance(lat, lng, order.customerLocation.lat, order.customerLocation.lng);
-            const etaMin = calculateETA(distKm, speed);
-
-            const courierLocation = {
-              lat: lat,
-              lng: lng,
-              speed: speed.toFixed(1),
-              distanceKm: distKm.toFixed(2),
-              etaMinutes: etaMin,
-              lastUpdated: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
-            };
-
-            db.ref('orders/' + orderId + '/courierLocation').set(courierLocation);
-          }
-        },
-        (err) => console.warn("GPS Hatası:", err.message),
-        { enableHighAccuracy: true, maximumAge: 3000, timeout: 8000 }
-      );
+    function toggleCart() { document.getElementById('cartDrawer').classList.toggle('open'); }
+    function openCheckoutModal() {
+      if (cart.length === 0) return alert("Sepetiniz boş!");
+      document.getElementById('checkoutModal').style.display = 'flex';
     }
 
-    function stopCourierTracking() {
-      if (gpsWatchId !== null) {
-        navigator.geolocation.clearWatch(gpsWatchId);
-        gpsWatchId = null;
-      }
+    function submitOrder() {
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      if (!name || !phone || !address) return alert("Lütfen bilgileri doldurun!");
+
+      const orderId = "SIP-" + Math.floor(100000 + Math.random() * 900000);
+      const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+      const time = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+
+      orders.unshift({ id: orderId, name, phone, address, items: [...cart], total, date: time });
+      saveAll();
+
+      let urunler = cart.map(i => `• ${i.name} (${i.qty} ${i.unit}) - ${(i.price * i.qty).toFixed(2)} TL`).join('\n');
+      let msg = `🛒 *YENİ SİPARİŞ (${orderId})*\n\n👤 ${name} (${phone})\n📍 ${address}\n\n📦 *Ürünler:*\n${urunler}\n\n💰 *Toplam:* ${total.toFixed(2)} TL`;
+
+      window.open(`https://api.whatsapp.com/send?phone=${MANAV_WHATSAPP_NO}&text=${encodeURIComponent(msg)}`, '_blank');
+
+      cart = [];
+      updateCartUI();
+      closeModal('checkoutModal');
+      toggleCart();
+      renderAdmin();
+      alert("Sipariş WhatsApp'a yönlendirildi!");
     }
 
-    function openLiveTracking(orderId) {
-      const order = orders.find(o => o.id === orderId);
-      if (!order) return;
-
-      const frame = document.getElementById('liveMapFrame');
-      if (order.courierLocation) {
-        const { lat, lng } = order.courierLocation;
-        frame.src = `https://maps.google.com/maps?q=${lat},${lng}&hl=tr&z=15&output=embed`;
-        updateLiveTrackingModal(order);
-      } else {
-        frame.src = `https://maps.google.com/maps?q=${order.customerLocation.lat},${order.customerLocation.lng}&hl=tr&z=15&output=embed`;
-        document.getElementById('trackingStatusText').innerHTML = `
-          <div style="background:#fef3c7; border:1px solid #fde68a; padding:10px; border-radius:8px; margin-top:10px; color:#92400e;">
-            <i class="fa-solid fa-clock"></i> Siparişiniz hazırlanıyor, kurye dağıtıma çıktığında canlı konumu burada belirecektir.
-          </div>
-        `;
-      }
-
-      document.getElementById('trackingOrderTitle').innerHTML = `<i class="fa-solid fa-motorcycle"></i> ${order.id} - Canlı Takip`;
-      document.getElementById('trackingModal').style.display = 'flex';
+    function promptAdminLogin() {
+      const p = prompt("Yönetici Şifresi:");
+      if (p === "admin123") showView('adminView');
+      else if (p !== null) alert("Hatalı Şifre!");
     }
 
-    function updateLiveTrackingModal(order) {
-      const statusBox = document.getElementById('trackingStatusText');
-      if (!statusBox || !order.courierLocation) return;
-      const { distanceKm, etaMinutes, speed, lastUpdated } = order.courierLocation;
-
-      statusBox.innerHTML = `
-        <div style="background:#eef2ff; border:1px solid #c7d2fe; padding:12px; border-radius:8px; margin-top:10px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span style="font-size:1.1rem; font-weight:bold; color:#1e3a8a;">
-              <i class="fa-solid fa-stopwatch"></i> Tahmini Varış: ~${etaMinutes} Dakika
-            </span>
-            <span style="background:#22c55e; color:white; padding:3px 8px; border-radius:12px; font-size:0.75rem; font-weight:600;">
-              Canlı GPS
-            </span>
-          </div>
-          <div style="font-size:0.85rem; color:#475569; display:flex; gap:12px; flex-wrap:wrap;">
-            <span><i class="fa-solid fa-road"></i> Kalan: <strong>${distanceKm} km</strong></span>
-            <span><i class="fa-solid fa-gauge-high"></i> Hız: <strong>${speed} km/s</strong></span>
-            <span><i class="fa-solid fa-arrows-rotate"></i> <strong>${lastUpdated}</strong></span>
-          </div>
-        </div>
-      `;
+    function showView(id) {
+      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      if (id === 'adminView') renderAdmin();
+      if (id === 'customerView') renderProducts();
     }
 
-    function closeModal(modalId) {
-      document.getElementById(modalId).style.display = 'none';
+    function exitAdmin() { showView('customerView'); }
+    function switchAdminTab(t) {
+      document.getElementById('adminTabProducts').style.display = t === 'products' ? 'block' : 'none';
+      document.getElementById('adminTabOrders').style.display = t === 'orders' ? 'block' : 'none';
+      document.getElementById('tabBtnProducts').classList.toggle('active', t === 'products');
+      document.getElementById('tabBtnOrders').classList.toggle('active', t === 'orders');
     }
+
+    function openAddProductModal() { document.getElementById('productModal').style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    // Sayfa açılır açılmaz ürünleri çiz
+    renderProducts();
   </script>
 </body>
 </html>
